@@ -54,8 +54,14 @@ public class FooResource {
     @GET
     @Path("{name}")
     public Response find(String id){
+        final String saludo = fooManager.saludar(id);
+
+        final JsonObject retorno = Json.createObjectBuilder()
+                .add("saludo", saludo)
+                .build();
+
         return Response
-                .ok(fooManager.saludar(id))
+                .ok(retorno)
                 .build();
     }
 }

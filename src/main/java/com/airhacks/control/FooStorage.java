@@ -29,6 +29,7 @@ public class FooStorage {
     @PostConstruct
     public void init(){
         this.storage = new ConcurrentHashMap<>();
+        ids = new AtomicLong();
     }
     
     public Long save(String name){
