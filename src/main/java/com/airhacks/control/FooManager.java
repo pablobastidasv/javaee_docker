@@ -6,7 +6,6 @@
 package com.airhacks.control;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 /**
  *
@@ -14,11 +13,9 @@ import javax.inject.Inject;
  */
 @Stateless
 public class FooManager {
-    @Inject
-    FooStorage fooStorage;
     
     public String saludar(String name){
-        fooStorage.save(name);
         return String.format("Hola %s", name);
     }
+    
 }

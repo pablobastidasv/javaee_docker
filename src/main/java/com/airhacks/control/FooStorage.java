@@ -48,4 +48,8 @@ public class FooStorage {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
+    
+    public void remove(Long id){
+        storage.remove(id);
+    }
 }

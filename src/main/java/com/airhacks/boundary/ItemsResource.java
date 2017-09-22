@@ -1,17 +1,19 @@
 package com.airhacks.boundary;
 
-import com.airhacks.control.FooManager;
 import com.airhacks.control.FooStorage;
 import com.airhacks.entity.Item;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
@@ -19,14 +21,11 @@ import javax.ws.rs.core.Response;
  *
  * @author pablobastidasv
  */
-@Path("foo")
+@Path("items")
 @Produces("application/json")
 @Consumes("application/json")
-public class FooResource {
-    
-    @Inject
-    private FooManager fooManager;
-    
+public class ItemsResource {
+                
     @Inject
     private FooStorage fooStorage;
     
@@ -52,16 +51,24 @@ public class FooResource {
     }
 
     @GET
-    @Path("{name}")
-    public Response find(String id){
-        final String saludo = fooManager.saludar(id);
-
-        final JsonObject retorno = Json.createObjectBuilder()
-                .add("saludo", saludo)
+    @Path("{id}")
+    public Response find(@PathParam("id") Long id){
+        Item item = fooStorage.get(id);
+        
+        if(Objects.isNull(item)){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }else{
+            return Response
+                .ok(item.getJson())
                 .build();
-
-        return Response
-                .ok(retorno)
-                .build();
+        }
+    }
+    
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") Long id){
+        fooStorage.remove(id);
+        
+        return Response.noContent().build();
     }
 }
